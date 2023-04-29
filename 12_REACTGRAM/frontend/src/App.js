@@ -20,8 +20,6 @@ import EditProfile from './pages/EditProfile/EditProfile';
 function App() {
   const { auth, loading } = useAuth()
 
-  console.log(loading)
-
   if (loading) {
     return <p>Carregando...</p>
   }
