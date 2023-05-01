@@ -1,10 +1,10 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import userService from '../services/userService'
 
 const initialState = {
     user: {},
     error: false,
-    sucess: false,
+    success: false,
     loading: false,
     message: null
 }
@@ -15,11 +15,12 @@ export const profile = createAsyncThunk(
     async (user, thunkAPI) => {
         const token = thunkAPI.getState().auth.user.token
 
-        const data = await userService.profile(user, token)
+        const data = await userService.profile(user,token)
 
-        return data;
+        return data
     }
 )
+
 
 // Update user details
 export const updateProfile = createAsyncThunk(
@@ -29,22 +30,22 @@ export const updateProfile = createAsyncThunk(
 
         const data = await userService.updateProfile(user, token)
 
-        // Check for errors
+        // Check for errors 
         if (data.errors) {
             return thunkAPI.rejectWithValue(data.errors[0])
         }
+
         return data
     }
 )
 
-//funcoes
 export const userSlice = createSlice({
-    name: "user",
+    name:"user",
     initialState,
     reducers: {
         resetMessage: (state) => {
-            state.message = null
-        },
+            state.message= null
+        }
     },
     extraReducers: (builder) => {
     builder
@@ -70,7 +71,7 @@ export const userSlice = createSlice({
             state.message = "Usuário atualizado com sucesso!";
         })
         .addCase(updateProfile.rejected, (state, action) => {
-            console.log(state, action)
+            console.log(state, action);
             state.loading = false;
             state.error = action.payload;
             state.user = {};
