@@ -16,7 +16,7 @@ const publishPhoto = async (data, token) => {
 };
 
 const photoService = {
-    publishPhoto
+    publishPhoto,
 }
   
 export default photoService;

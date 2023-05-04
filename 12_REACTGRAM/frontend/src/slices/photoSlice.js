@@ -10,18 +10,16 @@ const initialState = {
     message: null
 }
 
-/// Publish user photo
+// Publish user photo
 export const publishPhoto = createAsyncThunk(
     "photo/publish",
     async(photo, thunkAPI) => {
-        
         const token = thunkAPI.getState().auth.user.token
-
         const data = await photoService.publishPhoto(photo, token)
 
         // Check for erros
         if(data.errors) {
-            return thunkAPI.fulfillWithValue(data.errors[0])
+            return thunkAPI.rejectWithValue(data.errors[0])
         }
 
         return data;
@@ -29,34 +27,34 @@ export const publishPhoto = createAsyncThunk(
 )
 
 export const photoSlice = createSlice({
-    name: "photo",
+    name: "photo", 
     initialState,
     reducers: {
         resetMessage: (state) => {
-            state.message = null;
+            state.message = null
         },
     },
     extraReducers: (builder) => {
         builder
-          .addCase(publishPhoto.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-          })
-          .addCase(publishPhoto.fulfilled, (state, action) => {
-            state.loading = false;
-            state.success = true;
-            state.error = null;
-            state.photo = action.payload;
-            state.photos.unshift(state.photo)
-            state.message = "Foto publicada com sucesso!"
-          })
-          .addCase(publishPhoto.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-            state.photo = {};
-          })
+            .addCase(publishPhoto.pending, (state) => {
+                state.loading = true;
+                state.error = false;
+            })
+            .addCase(publishPhoto.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                state.error = null;
+                state.photo = action.payload;
+                state.photos.unshift(state.photo)
+                state.message = "Foto publicada com sucesso!"
+            })
+            .addCase(publishPhoto.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.photo = {};
+            })
     }
 });
 
-export const {resetMessage} = photoSlice.actions
-export default photoSlice.reducer
+export const { resetMessage } = photoSlice.actions;
+export default photoSlice.reducer;
